@@ -19,7 +19,11 @@ Instructions for use of assembly-metrics.py:
 - ./assembly-metrics.py genomic-data.fa
 
 Summary of Results:
+
 Name:Contig4555 length=864	Number of Contigs:1591	Total length:118549266	Average length:74512.42363293526
+
 Name:Contig956 length=944	Number of Contigs:912	Total length:124541912	Average length:136559.11403508772
+
 Name:Crem_Contig1067	Number of Contigs:3670	Total length:145442736	Average length:39630.17329700272
+
 Name:ScDsagR_134_HRSCAF_180 length=1287	Number of Contigs:187	Total length:130480874	Average length:697758.6844919786
