@@ -1,6 +1,7 @@
 library(tidyverse)
 library(palmerpenguins)
 library(broom)
+library(dplyr)
 setwd("/Users/cmdb/qb25-answers/week5")
 
 # Step 1.1
@@ -69,41 +70,41 @@ t.test(joined$mother_count, joined$father_count, paired = TRUE)
 
 
 
-# Step 3.2 (I apologize for how bad this part is I plan on resubmitting)
+# Step 3.2
 
-grosses <- read.csv("grosses.csv")
+education <- read.csv("english_education.csv")
 
 ## Gross for each musical on week one separated by theater
-ambassador_theatre <- grosses %>%
-  filter(week_number == 1, theatre == "Ambassador Theatre") %>%
-  select(week_number, show, weekly_gross)
+scores <- education %>%
+  select(town11nm, education_score, population_2011)
+
+ggplot(data = scores,
+       aes(x = population_2011,
+           y = education_score,))+
+  geom_point() +
+  labs(title = "Relationship Between Population and Education Score ",
+       x = "Population",
+       y = "Education Score")
+
+ggsave("ex3-2.png")
+
+model<- lm(education_score ~ population_2011, data = education)
+summary(model)
 
 
-ggplot(data = ambassador_theatre,
-       aes(x = weekly_gross,
-           fill = show
-       )) +
-  geom_histogram(bins = 20, position = 'identity', alpha = 0.5)+
- # scale_x_log10() +
-  labs(title = "Gross by Show on Opening Week ",
-       y = "Gross",
-       x = "")
-# Bar Graph
-bar_data <- grosses %>%
-  filter(theatre == "Ambassador Theatre") %>%
-  select(show, week number)
 
 
-ggplot(data = bar_data,
-       aes(y = weekly_gross_overall
-       )) +
-  geom_bar() 
-#  labs(title = "stuff",
-#       y = "Total Gross",
-#       x = "Show")
-# ggsave("ex3_gross_by_musical.png")
 
-#shows that did the best on week 1 do best overall
+
+
+
+
+
+
+
+
+
+
 
 
 
