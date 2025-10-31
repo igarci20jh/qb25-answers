@@ -61,13 +61,11 @@ ggplot(data = joined_long,
   labs(title = "DNMs Distributions by Parent",
        y = "Frequency",
        x = "DNM Count")
-ggsave("ex3_b.png")
+ggsave("ex2_c.png")
 
 # Step 2.6
 t.test(joined$mother_count, joined$father_count, paired = TRUE)
-
-
-
+lm(data = joined, formula = mother_count - father_count ~ 1)
 
 
 # Step 3.2
