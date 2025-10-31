@@ -2,8 +2,10 @@
 
 1. The size of this relationship is 0.37757 which means the DNMs are growing
 at this rate based on the maternal age. This does match my plot. 
-2. The relationship is significant because the p value is 2e-16 which means that
-2e-16 is the chance that this difference is caused by random chance.
+2. The relationship is significant because the p value is 2e-16 which means that 2e-16 is the chance that this difference is caused by random chance.
+
+# Step 2.4
+The expected number of DNMs is 78.69524.
 
 # Step 2.6
 
@@ -11,6 +13,8 @@ at this rate based on the maternal age. This does match my plot.
 coming from the father is higher than DMS coming from the mothers. This does match my plot.     
 2. The relationship is significant because the p value is 2e-16 which means that
 2e-16 is the chance that this difference is caused by random chance.
+
+3. The coefficient estimate was the same as the t-test. I would interpret the coefficient estimate for the intercept term as the starting point of the models prediction.
 
 # Step 3.1
 I chose the 2024-01-23 dataset. Specifically the english_education.csv.
