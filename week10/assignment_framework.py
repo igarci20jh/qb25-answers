@@ -50,43 +50,32 @@ t_matrix = np.zeros((len(sequence1)+1, len(sequence2)+1), dtype= str)
 #===================#
 # Populate Matrices #
 #===================#
-gap_penalty = float(sys.argv[3])
-
-#first column and row for f matrix
+gap_penalty = int(sys.argv[3])
 for i in range(1, len(sequence1) + 1):
     f_matrix[i, 0] = f_matrix[i -1,0] + gap_penalty
-
-for j in range(1, len(sequence2) + 1): 
-    f_matrix[0, j] = f_matrix[0, j -1] + gap_penalty
-
-
-# first column and row for t mattrix
-for i in range(1, len(sequence1) + 1):
     t_matrix[i, 0] = 'v'
 
 for j in range(1, len(sequence2) + 1): 
+    f_matrix[0, j] = f_matrix[0, j -1] + gap_penalty
     t_matrix[0, j] = 'h'
+
+
 
 # filling in matrices
 for i in range(1, len(sequence1) + 1):
-	for j in range(1, len(sequence2)+ 1):
-		v_score = f_matrix[i - 1, j] + gap_penalty
-		h_score = f_matrix[i, j-1] + gap_penalty
-		d_score = sigma[(sequence1[i-1], sequence2[j-1])] + f_matrix[i-1, j-1]
-		f_matrix[i, j] = max(v_score, h_score, d_score)
-	if f_matrix[i, j] == d_score:
-		t_matrix[i,j]== 'd'
-		#fill in location in matrix with d
-	elif f_matrix[i, j] == v_score:
-		t_matrix[i,j] == 'v'
-		#fill in location in matrix with v
-	else:
-		t_matrix[i, j] == 'h'
-		#fill in location in matrix with h
-		
+    for j in range(1, len(sequence2) + 1):
+        h_score = f_matrix[i, j - 1] + gap_penalty
+        v_score = f_matrix[i - 1, j] + gap_penalty
+        d_score = f_matrix[i - 1, j - 1] + sigma[(sequence1[i - 1], sequence2[j - 1])]
+        highest = max(h_score, v_score, d_score)
+        f_matrix[i, j] = highest
 
-# t matrix and f matrix must be in same block
-# just do if statements over and over because you want the t matrix to be filled with d's, v's, and h's
+        if highest == d_score:
+            t_matrix[i, j] = 'd'
+        elif highest == v_score:
+            t_matrix[i, j] = 'v'
+        else:
+            t_matrix[i, j] = 'h'
 
 #========================================#
 # Follow traceback to generate alignment #
@@ -97,24 +86,28 @@ i = len(sequence1)
 j = len(sequence2)
 # The aligned sequences are assumed to be strings named sequence1_aligment
 # and sequence2_alignment in later code
-while i > 0 or j > 0:
-    move = t_matrix[i, j]
+while i != 0 or j != 0:
 
-    if move == 'd':
+    if t_matrix[i,j] == 'd':
         sequence1_alignment.append(sequence1[i-1])
         sequence2_alignment.append(sequence2[j-1])
         i -= 1
         j -= 1
+        continue
 
-    elif move == 'v':
+    if t_matrix[i,j] == 'v':
         sequence1_alignment.append(sequence1[i-1])
         sequence2_alignment.append('-')
         i -= 1
+        continue
 
-    elif move == 'h':
+
+    if t_matrix[i,j] == 'h':
         sequence1_alignment.append('-')
         sequence2_alignment.append(sequence2[j-1])
         j -= 1
+        continue
+
 # reversing them since alignment is backwards
 sequence1_alignment = ''.join(sequence1_alignment[::-1])
 sequence2_alignment = ''.join(sequence2_alignment[::-1])
@@ -155,33 +148,17 @@ output.close()
 #=============================#
 # Calculate sequence identity #
 #=============================#
-gaps_sequence1 = 0
-for i in range(len(sequence1_alignment)):
-	if sequence1_alignment[i] == '-':
-		gaps_sequence1 += 1
 
-gaps_sequence2 = 0
-for i in range(len(sequence2_alignment)):
-	if sequence2_alignment[i] == '-':
-		gaps_sequence2 += 1
+alignment_1_identity = identity_alignment.count("|")/len(sequence1) *100
+alignment_2_identity = identity_alignment.count("|")/len(sequence2) *100
 
-# matches between the two aligned sequences
-matches = 1
-for i in range(len(sequence1_alignment)):
-	if sequence1_alignment[i] == sequence2_alignment[i]:
-		matches += 1
-
-percent_ident = (matches/len(sequence1_alignment)) *100
-
-alignment_score = f_matrix[len(sequence1), len(sequence2)]
 
 #======================#
 # Print alignment info #
 #======================#
 
-# You need the number of gaps in each sequence, the sequence identity in
-# each sequence, and the total alignment score
-print("Alignment Score:", alignment_score)
-print('Gaps in sequence 1:', gaps_sequence1)
-print('Gaps in sequence 2:', gaps_sequence2)
-print(f'Percent identity: {percent_ident: .2f}%')
+print(sequence1_alignment.count("-"))
+print(sequence2_alignment.count("-"))
+print(alignment_1_identity)
+print(alignment_2_identity)
+print(f_matrix[len(sequence1), len(sequence2)])
